@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -30,22 +30,16 @@ jobs:
       - name: Install PlatformIO esptool
         run: |
           python -m pip install platformio
-          # esptool.py is installed by platformio
-          Get-ChildItem "$env:USERPROFILE\.platformio\packages\tool-esptool\esptool.py" | Select-Object -First 1 | ForEach-Object { echo "ESPTOOL=$($_.FullName)" >> $env:GITHUB_ENV }
 
       - name: Build Rust firmware
-        shell: pwsh
         run: |
-          # Build release binary for riscv32imc-unknown-none-elf
           cargo build --release --target riscv32imc-unknown-none-elf
 
       - name: Convert ELF to ESP32 image binary
-        shell: pwsh
         run: |
-          $elf = "target/riscv32imc-unknown-none-elf/release/wirelessboot-recovery"
-          $bin = "release/recovery.bin"
-          & $env:ESPTOOL --chip esp32c3 elf2image -o $bin $elf
-          Get-Item $bin | Select-Object Name, Length
+          ESPTOOL=$(python -c "import platformio; import os; print(os.path.expanduser('~/.platformio/packages/tool-esptool/esptool.py'))")
+          python $ESPTOOL --chip esp32c3 elf2image -o release/recovery.bin target/riscv32imc-unknown-none-elf/release/wirelessboot-recovery
+          ls -la release/recovery.bin
 
       - name: Upload recovery.bin artifact
         uses: actions/upload-artifact@v4
@@ -70,7 +64,7 @@ jobs:
 
   release:
     needs: build
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
