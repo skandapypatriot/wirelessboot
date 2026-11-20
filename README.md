@@ -1,6 +1,6 @@
 # BLE OTA Recovery Firmware for ESP32-C3
 
-A minimal factory partition firmware (<250 KB) that provides BLE-based OTA recovery.
+A minimal factory partition firmware (<256 KB) that provides BLE-based OTA recovery.
 Normal user apps contain zero BLE code.
 
 ## Hardware
@@ -15,20 +15,58 @@ Normal user apps contain zero BLE code.
 | factory | app  | factory | 0x10000 | 0x40000 (256 KB) |
 | ota_0   | app  | ota_0   | 0x50000 | 0x3B0000 |
 
-## Build
+## Quick Start (PlatformIO - Recommended)
+
+### One-command setup & build
+```powershell
+# Clone and build
+git clone <this-repo>
+cd wirelessboot
+.\setup.ps1
+```
+
+### Build and flash
+```powershell
+.\setup.ps1 -Flash
+```
+
+### Build, flash, and monitor
+```powershell
+.\setup.ps1 -Flash -Monitor
+```
+
+### Size report
+```powershell
+.\setup.ps1 -Size
+```
+
+### Clean build
+```powershell
+.\setup.ps1 -Clean
+```
+
+The `setup.ps1` script:
+1. Checks Python is installed
+2. Installs PlatformIO via pip (if needed)
+3. Installs ESP32 platform (espressif32)
+4. Builds with size optimizations
+5. Optionally flashes and opens monitor
+
+## Manual PlatformIO
+```bash
+pio run              # Build
+pio run -t upload    # Flash
+pio run -t size      # Size report
+pio device monitor   # Serial monitor
+```
+
+## Legacy ESP-IDF Build
 ```bash
 # Requires ESP-IDF v5.4+
 idf.py set-target esp32c3
 idf.py build
 idf.py size
 idf.py size-components
-```
-
-## Flash
-```bash
-idf.py flash
-# Or manually:
-# esptool.py --chip esp32c3 write_flash 0x10000 build/ble_ota_recovery.bin
 ```
 
 ## Operation
