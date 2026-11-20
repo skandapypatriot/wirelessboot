@@ -1,0 +1,32 @@
+# PlatformIO
+.pio/
+.pioenvs/
+*.bin
+*.elf
+*.map
+
+# ESP-IDF
+build/
+sdkconfig
+sdkconfig.old
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Keys (never commit real keys!)
+private.pem
+*.pem
+*.key
