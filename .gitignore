@@ -10,6 +10,11 @@ build/
 sdkconfig
 sdkconfig.old
 
+# Rust
+.rust/
+target/
+Cargo.lock
+
 # Python
 __pycache__/
 *.pyc
@@ -30,3 +35,9 @@ Thumbs.db
 private.pem
 *.pem
 *.key
+
+# Release artifacts (tracked in git)
+!release/
+!release/*.bin
+!release/partitions.csv
+!release/ota_client.py

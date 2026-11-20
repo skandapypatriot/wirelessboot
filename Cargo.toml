@@ -1,0 +1,32 @@
+[package]
+name = "wirelessboot-recovery"
+version = "0.1.0"
+edition = "2021"
+description = "Bare-metal BLE OTA Recovery for ESP32-C3"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/casmm/wirelessboot"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+debug = false
+overflow-checks = false
+
+[dependencies]
+# Bare-metal ESP32-C3 HAL
+esp-hal = { version = "1.2.2", features = ["esp32c3", "rt"] }
+esp-storage = { version = "0.10.0", features = ["esp32c3"] }
+esp-backtrace = { version = "0.20.0", default-features = false, features = ["esp32c3"] }
+esp-println = { version = "0.18.0", features = ["esp32c3"] }
+
+# CRC32 for otadata
+crc32fast = "1.4"
+
+# Heapless for small buffers
+heapless = "0.8"
+
+[workspace]
+members = []
